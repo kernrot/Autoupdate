@@ -1,0 +1,81 @@
+﻿<Window x:Class="Kernrot.GitLab.Autoupdate.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:autoupdate="clr-namespace:Kernrot.GitLab.Autoupdate"
+        mc:Ignorable="d"
+        Title="Update" Height="350" Width="600" ResizeMode="NoResize">
+    <Window.Resources>
+        <autoupdate:DateTimeConverter x:Key="DateTimeConverter" />
+    </Window.Resources>
+    <Grid
+        DataContext="{Binding Process, RelativeSource={RelativeSource AncestorType=autoupdate:MainWindow, Mode=FindAncestor}}"
+        Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <GroupBox Grid.Row="0" Grid.Column="0" DataContext="{Binding BuildsInstalled}"
+                  BorderBrush="Orange" Padding="10">
+            <GroupBox.ToolTip>
+                <TextBlock>
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} ({1})">
+                            <Binding Path="commit.author_name" />
+                            <Binding Path="commit.author_email" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </GroupBox.ToolTip>
+            <GroupBox.Header>
+                <TextBlock Text="{Binding id, StringFormat='{}Installed Build #{0}'}" />
+            </GroupBox.Header>
+            <StackPanel>
+
+                <TextBlock Text="{Binding commit.short_id, StringFormat='{}Version {0}'}" />
+                <TextBlock Text="{Binding finished_at, Converter={StaticResource DateTimeConverter}}" />
+
+                <ScrollViewer Height="180" Margin="10">
+                    <TextBlock Text="{Binding commit.message}" TextWrapping="Wrap"
+                               Background="{DynamicResource {x:Static SystemColors.MenuBrushKey}}" />
+                </ScrollViewer>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Grid.Row="0" Grid.Column="1" DataContext="{Binding BuildsLatest}"
+                  BorderBrush="GreenYellow" Padding="10">
+            <GroupBox.ToolTip>
+                <TextBlock>
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} ({1})">
+                            <Binding Path="commit.author_name" />
+                            <Binding Path="commit.author_email" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </GroupBox.ToolTip>
+            <GroupBox.Header>
+                <TextBlock Text="{Binding id, StringFormat='{}Latest Build #{0}'}" />
+            </GroupBox.Header>
+            <StackPanel>
+
+                <TextBlock Text="{Binding commit.short_id, StringFormat='{}Version {0}'}" />
+                <TextBlock Text="{Binding finished_at, Converter={StaticResource DateTimeConverter}}" />
+
+                <ScrollViewer Height="180" Margin="10">
+                    <TextBlock Text="{Binding commit.message}" TextWrapping="Wrap"
+                               Background="{DynamicResource {x:Static SystemColors.MenuBrushKey}}" />
+                </ScrollViewer>
+            </StackPanel>
+        </GroupBox>
+
+        <Button Margin="5" Grid.Column="0" Grid.Row="1" Content="Keep installed Version"
+                Command="{Binding StartApplicationCommand}" />
+        <Button Margin="5" Grid.Column="1" Grid.Row="1" Content="Update to latest Version"
+                IsEnabled="{Binding HasNewerVersion}" Command="{Binding UpdateCommand}" />
+    </Grid>
+</Window>
