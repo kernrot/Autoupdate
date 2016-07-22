@@ -10,7 +10,7 @@ Enables a user to choose to keep the current version or update to a new one.
 Limited error handling included :D.
 
 
-![Screenshot](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Screenshot")
+![Screenshot](Screenshot.png "Screenshot")
 
 This project also shows how to get information from GitLab via the GitLab API v3 using C#.
 Implemented using C#6/WPF for .Net4.6.
